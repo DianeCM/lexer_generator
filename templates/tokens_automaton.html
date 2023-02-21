@@ -25,9 +25,9 @@
 
       <script type="text/javascript">
         // provide data in the DOT language
-        var DOTstring1 = 'digraph G {margin=0.1;rankdir=LR;start [height=0, label="", shape=plaintext, width=0];0 [shape=circle, style=""];0 [shape=circle, style=""];0 -> 0  [id="0 a 0", label=a, labeldistance=2];0 [shape=circle, style=""];0 [shape=circle, style=""];0 -> 0  [id="0 b 0", label=b, labeldistance=2];1 [shape=circle, style=""];0 -> 1  [id="0 b 1", label=b, labeldistance=2];1 [shape=circle, style=""];2 [shape=circle, style=bold];1 -> 2  [id="1 a 2", label=a, labeldistance=2];start -> 0  [label="", style=dashed];}';
-        var DOTstring2 = 'digraph G {margin=0.1;rankdir=LR;start [height=0, label="", shape=plaintext, width=0];0 [shape=circle, style=""];0 [shape=circle, style=""];0 -> 0  [id="0 a 0", label=a, labeldistance=2];0 [shape=circle, style=""];1 [shape=circle, style=""];0 -> 1  [id="0 b 1", label=b, labeldistance=2];1 [shape=circle, style=""];2 [shape=circle, style=bold];1 -> 2  [id="1 a 2", label=a, labeldistance=2];1 [shape=circle, style=""];1 [shape=circle, style=""];1 -> 1  [id="1 b 1", label=b, labeldistance=2];2 [shape=circle, style=bold];0 [shape=circle, style=""];2 -> 0  [id="2 a 0", label=a, labeldistance=2];2 [shape=circle, style=bold];1 [shape=circle, style=""];2 -> 1  [id="2 b 1", label=b, labeldistance=2];start -> 0  [label="", style=dashed];}'
-        var tokens_automatons= [DOTstring1,DOTstring2]
+        //var DOTstring1 = 'digraph G {margin=0.1;rankdir=LR;start [height=0, label="", shape=plaintext, width=0];0 [shape=circle, style=""];0 [shape=circle, style=""];0 -> 0  [id="0 a 0", label=a, labeldistance=2];0 [shape=circle, style=""];0 [shape=circle, style=""];0 -> 0  [id="0 b 0", label=b, labeldistance=2];1 [shape=circle, style=""];0 -> 1  [id="0 b 1", label=b, labeldistance=2];1 [shape=circle, style=""];2 [shape=circle, style=bold];1 -> 2  [id="1 a 2", label=a, labeldistance=2];start -> 0  [label="", style=dashed];}';
+        //var DOTstring2 = 'digraph G {margin=0.1;rankdir=LR;start [height=0, label="", shape=plaintext, width=0];0 [shape=circle, style=""];0 [shape=circle, style=""];0 -> 0  [id="0 a 0", label=a, labeldistance=2];0 [shape=circle, style=""];1 [shape=circle, style=""];0 -> 1  [id="0 b 1", label=b, labeldistance=2];1 [shape=circle, style=""];2 [shape=circle, style=bold];1 -> 2  [id="1 a 2", label=a, labeldistance=2];1 [shape=circle, style=""];1 [shape=circle, style=""];1 -> 1  [id="1 b 1", label=b, labeldistance=2];2 [shape=circle, style=bold];0 [shape=circle, style=""];2 -> 0  [id="2 a 0", label=a, labeldistance=2];2 [shape=circle, style=bold];1 [shape=circle, style=""];2 -> 1  [id="2 b 1", label=b, labeldistance=2];start -> 0  [label="", style=dashed];}'
+        //var tokens_automatons= [DOTstring1,DOTstring2]
         var index=0
         function create_automaton(DOTstring) {
           var parsedData = vis.parseDOTNetwork(DOTstring);
@@ -107,10 +107,10 @@
         select_path(network,1,'a',2)
       </script>
     </div>
-    <div id="buttons">
-      <button onclick="next_token()">Next</button>
-      <button onclick="previous_token()">Previous</button>
-    </div>
+  </div>
+  <div id="buttons">
+    <button onclick="next_token()">Next</button>
+    <button onclick="previous_token()">Previous</button>
   </div>
 </body>
 
