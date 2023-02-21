@@ -19,6 +19,10 @@
         margin: 100px;
         margin-left: 200px;
     }
+    .anchor{
+      margin: 100px;
+      margin-left: 100px;
+    }
   </style>
 </head>
 
@@ -34,7 +38,7 @@
         <div class="mb-3">
           <input type="text" name="regular_expression" placeholder="Regular Expression"><br /><br />
         </div>
-          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-primary">Add Token</button>
        <!--/fieldset>-->
     </div> 
 
@@ -52,12 +56,16 @@
           <tr>
             <th scope="row">{{type}}</th>
                <td>{{tokens[type]}}</td>
+               <td><button class="btn btn-primary">Delete</button></td>
           </tr>
         {%endfor%}
         </tbody>
       </table>
     </div>
     </div>
+
+      <a href="tokens_automaton"> </a>
+      <a href=""><button class="anchor btn btn-primary">Tokenizer</button></a>
 </body>
 
 </html>

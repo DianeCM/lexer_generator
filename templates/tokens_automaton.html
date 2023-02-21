@@ -92,25 +92,25 @@
         }
 
         //events functions
-        function next_token(){
+        function next_token(tokens_automatons){
           index=(index+1)%tokens_automatons.length
           network=create_automaton(tokens_automatons[index])
         }
 
-        function previous_token(){
+        function previous_token(tokens_automatons){
           index=index>0 ? index-1:tokens_automatons.length-1 
           network=create_automaton(tokens_automatons[index])
         }
 
-        network = create_automaton(DOTstring1)
-        select_path(network,0,'b',1)
-        select_path(network,1,'a',2)
+        network = create_automaton(tokens[0])
+        //select_path(network,0,'b',1)
+        //select_path(network,1,'a',2)
       </script>
     </div>
   </div>
-  <div id="buttons">
-    <button onclick="next_token()">Next</button>
-    <button onclick="previous_token()">Previous</button>
+  <div id="buttons" class="d-flex flex-row">
+    <button onclick="next_token(tokens)">Next</button>
+    <button onclick="previous_token(tokens)">Previous</button>
   </div>
 </body>
 

@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import render_template
 from flask import request
-
+from tools.regex import *
 tokens={}
 app = Flask(__name__)
 
@@ -11,7 +11,8 @@ app = Flask(__name__)
 
 @app.route('/tokens_automaton')
 def tokens_automaton(name=None):
-    return render_template('tokens_automaton.html')
+    tokens_automaton = [Regex(regular_expression).dfa().graph() for regular_expression in tokens.values()]
+    return render_template('tokens_automaton.html',tokens=tokens,tokens_automaton=tokens_automaton)
 
 @app.route('/',methods=['POST','GET'])
 def tokens_table(name=None):
