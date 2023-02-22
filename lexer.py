@@ -1,7 +1,7 @@
-from cmp.utils import Token
-from cmp.automata import State
-from nfa_dfa_class import DFA
-from regex import Regex
+from .cmp.utils import Token
+from .cmp.automata import State
+from .nfa_dfa_class import DFA
+from .regex import Regex
 import sys
 
 a = State(0)
@@ -93,7 +93,7 @@ class Lexer:
     
         
     def _walk(self, string):
-        state = self.automaton
+        state = self.automaton 
         final = state if state.final else None
         final_lex = lex = ''
         
@@ -108,7 +108,7 @@ class Lexer:
             else:
                 return final, final_lex
 
-        final_lex = lex  
+        # final_lex = lex  
         #---------------end----------------------
         return final, final_lex
     
@@ -140,28 +140,76 @@ letters = '|'.join(chr(n) for n in range(ord('a'),ord('z')+1))
 print('Non-zero digits:', nonzero_digits)
 print('Letters:', letters)
 
+# lexer = Lexer([
+#     ('num', f'({nonzero_digits})(0|{nonzero_digits})*'),
+#     ('for' , 'for'),
+#     ('let', 'let'),
+#     ('in', 'in'),
+#     ('foreach' , 'foreach'),
+#     ('sum', '+'),
+#     ('equal', '='),
+#     ('space', '  *'),
+#     ('id', f'({letters})({letters}|0|{nonzero_digits})*')
+# ], 'eof')
+
 lexer = Lexer([
-    ('num', f'({nonzero_digits})(0|{nonzero_digits})*'),
-    ('for' , 'for'),
-    ('foreach' , 'foreach'),
-    ('space', '  *'),
-    ('id', f'({letters})({letters}|0|{nonzero_digits})*')
+    ('type_a_clausura' , 'a*'),
+    ('type_ba_a_clausura_clausura', '(baa*)*'),
+    ('type_b_or_epsilon', 'b|c')
 ], 'eof')
 
 # lexer = Lexer([
 #     ('space', '  *'),
 # ], 'eof')
 
-text = '5465 for 45foreach fore'
-print(f'\n>>> Tokenizando: "{text}"')
-tokens = lexer(text)
-print(tokens)
-assert [t.token_type for t in tokens] == ['num', 'space', 'for', 'space', 'num', 'foreach', 'space', 'id', 'eof']
-assert [t.lex for t in tokens] == ['5465', ' ', 'for', ' ', '45', 'foreach', ' ', 'fore', '$']
+# text = '5465 for 45foreach fore'
+# print(f'\n>>> Tokenizando: "{text}"')
+# tokens = lexer(text)
+# print(tokens)
+# assert [t.token_type for t in tokens] == ['num', 'space', 'for', 'space', 'num', 'foreach', 'space', 'id', 'eof']
+# assert [t.lex for t in tokens] == ['5465', ' ', 'for', ' ', '45', 'foreach', ' ', 'fore', '$']
 
-text = '4forense forforeach for4foreach foreach 4for'
+# text = '4forense forforeach for4foreach foreach 4for'
+# print(f'\n>>> Tokenizando: "{text}"')
+# tokens = lexer(text)
+# print(tokens)
+# assert [t.token_type for t in tokens] == ['num', 'id', 'space', 'id', 'space', 'id', 'space', 'foreach', 'space', 'num', 'for', 'eof']
+# assert [t.lex for t in tokens] == ['4', 'forense', ' ', 'forforeach', ' ', 'for4foreach', ' ', 'foreach', ' ', '4', 'for', '$']
+
+# text = 'let x = read in 2 + x + 5'
+# print(f'\n>>> Tokenizando: "{text}"')
+# tokens = lexer(text)
+# print(tokens)
+# assert [t.token_type for t in tokens] == ['let', 'space', 'id', 'space', 'equal', 'space', 'id', 'space', 'in', 'space', 'num', 'space', 'sum', 'space', 'id', 'space', 'sum', 'space', 'num', 'eof']
+# assert [t.lex for t in tokens] == ['let', ' ', 'x', ' ', '=', ' ', 'read', ' ', 'in', ' ', '2', ' ', '+', ' ', 'x', ' ', '+', ' ', '5', '$']
+
+# text = 'b'
+# print(f'\n>>> Tokenizando: "{text}"')
+# tokens = lexer(text)
+# print(tokens)
+# assert [t.token_type for t in tokens] == ['type_b_or_epsilon', 'eof']
+# assert [t.lex for t in tokens] == ['b', '$']
+
+# assert not [t.token_type for t in tokens] == ['type_ba_a_clausura_clausura', 'eof']
+
+# text = 'aaaa'
+# print(f'\n>>> Tokenizando: "{text}"')
+# tokens = lexer(text)
+# print(tokens)
+# assert [t.token_type for t in tokens] == ['type_a_clausura', 'eof']
+# assert [t.lex for t in tokens] == ['aaaa', '$']
+
+# # # assert [t.token_type for t in tokens] == ['type_a_clausura', 'type_a_clausura', 'type_a_clausura', 'type_a_clausura', 'eof']
+# # # assert [t.lex for t in tokens] == ['a', 'a', 'a', 'a', '$']
+
+# text = 'baaaa'
+# print(f'\n>>> Tokenizando: "{text}"')
+# tokens = lexer(text)
+# print(tokens)
+# assert [t.token_type for t in tokens] == ['type_ba_a_clausura_clausura', 'eof']
+# assert [t.lex for t in tokens] == ['baaaa' '$']
+
+text = 'baaaab'
 print(f'\n>>> Tokenizando: "{text}"')
 tokens = lexer(text)
 print(tokens)
-assert [t.token_type for t in tokens] == ['num', 'id', 'space', 'id', 'space', 'id', 'space', 'foreach', 'space', 'num', 'for', 'eof']
-assert [t.lex for t in tokens] == ['4', 'forense', ' ', 'forforeach', ' ', 'for4foreach', ' ', 'foreach', ' ', '4', 'for', '$']
