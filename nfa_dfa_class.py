@@ -11,7 +11,7 @@ class NFA:
         
         for (origin, symbol), destinations in transitions.items():
             assert hasattr(destinations, '__iter__'), 'Invalid collection of states'
-            self.transitions[origin][symbol] = destinations
+            self.transitions[origin][symbol] = set(destinations)
             self.vocabulary.add(symbol)
             
         self.vocabulary.discard('')
@@ -58,7 +58,8 @@ class DFA(NFA):
         
     def _move(self, symbol):
         try:
-            self.current=self.transitions[self.current][symbol][0]
+            temp=self.transitions[self.current]
+            self.current=list(temp[symbol])[0]
         except:
             return False 
         return True 

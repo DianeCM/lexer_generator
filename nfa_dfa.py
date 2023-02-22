@@ -37,9 +37,11 @@ def epsilon_closure(automaton, states):
         state = pending.pop()
         try: 
             next=automaton.transitions[state]['']
-            pending=pending+next
+            add_pending=[s for s in next if s not in closure and s not in pending]
+            #if len(): pending=list(set(pending).union(next))
+            pending = pending + add_pending
             closure.update(next)
-        except:
+        except KeyError:
             continue         
     return ContainerSet(*closure)
 
@@ -135,9 +137,15 @@ def automata_union(a1, a2):
     
     ## Add transitions to final state ...
     for state in a1.finals:
-        transitions[state+d1,'']=[final]
+        try:
+            transitions[state+d1,''].append(final)
+        except KeyError:
+            transitions[state+d1,'']=[final]
     for state in a2.finals:
-        transitions[state+d2,'']=[final]
+        try:
+            transitions[state+d2,''].append(final)
+        except KeyError:
+             transitions[state+d2,'']=[final]
             
     states = a1.states + a2.states + 2
     finals = { final }
@@ -176,9 +184,16 @@ def automata_concatenation(a1, a2):
         transitions[origin+d2,symbol]=destinations
     
     ## Add transitions to final state ...
-    transitions[a1.states-1,''] = [a1.states]
+    try:
+        transitions[a1.states-1,''].append(a1.states)
+    except KeyError:
+       transitions[a1.states-1,''] = [a1.states]
+
     for state in a2.finals:
-        transitions[state+d2,'']=[final]
+        try:
+            transitions[state+d2,''].append(final)
+        except KeyError:
+            transitions[state+d2,'']=[final]
             
             
     states = a1.states + a2.states + 1
@@ -216,11 +231,14 @@ def automata_closure(a1):
         transitions[origin+d1,symbol]=destinations
     
     ## Add transitions from start state ...
-    transitions[start,''] = [a1.start+1,final]
+        transitions[start,''] = [a1.start+1,final]
     
     ## Add transitions to final state and to start state ...
     for state in a1.finals:
-        transitions[state+d1,'']=[final]
+        try:
+            transitions[state+d1,''].append(final)
+        except KeyError:
+            transitions[state+d1,'']=[final]
     transitions[final,'']=[start]
             
     states = a1.states +  2
@@ -287,7 +305,8 @@ def distinguish_states(group, automaton, partition):
         current_transitions=[automaton.states for _ in range(len(vocabulary))]
         for i,symbol in enumerate(vocabulary):
             try:
-                destination=transitions[member][symbol][0]
+                # print(transitions[member][symbol])
+                destination=list(transitions[member][symbol])[0]
                 destination_group=partition[destination].representative
                 current_transitions[i]=destination_group
             except KeyError:
@@ -334,9 +353,11 @@ def automata_minimization(automaton):
         origin = state.value
         # Your code here
         for symbol, destinations in automaton.transitions[origin].items():
+            print("destinations")
+            print(destinations)
             next=0
             for j in range(len(states)):
-                if destinations[0] in [node.value for node in partition.groups[j]]:
+                if list(destinations)[0] in [node.value for node in partition.groups[j]]:
                     next=j
                     break
             try:

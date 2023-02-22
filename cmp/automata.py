@@ -81,6 +81,8 @@ class State:
 
     @staticmethod
     def from_nfa(nfa, get_states=False):
+        print("metodo from_nfa")
+        print(type(nfa))
         states = []
         for n in range(nfa.states):
             state = State(n, n in nfa.finals)
@@ -91,7 +93,9 @@ class State:
             origin[symbol] = [ states[d] for d in destinations ]
 
         if get_states:
+            print(states[nfa.start])
             return states[nfa.start], states
+        print(states[nfa.start])
         return states[nfa.start]
 
     @staticmethod

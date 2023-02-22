@@ -105,7 +105,7 @@ def build_parsing_table(G, firsts, follows):
 
 
 
-def deprecated_metodo_predictivo_no_recursivo(G, M=None, firsts=None, follows=None):
+def metodo_predictivo_no_recursivo(G, M=None, firsts=None, follows=None):
     
     # checking table...
     if M is None:
@@ -118,9 +118,17 @@ def deprecated_metodo_predictivo_no_recursivo(G, M=None, firsts=None, follows=No
     # parser construction...
     def parser(w):
         # w ends with $ (G.EOF)
+        print("table")
+        pprint(M)
+        print(M.keys())
+        print("w")
+        print(w)
+        # for key in M.keys():
+        #     print(type(key[0]))
+        #     print(type(key[1]))
     
         # init:
-        stack = [G.EOF,G.startSymbol]
+        stack = [G.EOF, G.startSymbol]
         cursor = 0
         output = []
         
@@ -130,9 +138,22 @@ def deprecated_metodo_predictivo_no_recursivo(G, M=None, firsts=None, follows=No
             a = w[cursor]
             if top == G.EOF: break
             if top.IsTerminal:
+                print("top como terminal")
+                print(top)
+                print(a)
+                if top == a:
+                    print("top es igual a 'a'")
                 assert top == a
                 cursor+=1
             elif top.IsNonTerminal:
+                print("M[top, a]")
+                print(M[top, a])
+                print("top")
+                print(top)
+                print("a")
+                print(a)
+                print(type(a))
+
                 production = M[top, a][0]
                 output.append(production)
                 if production.IsEpsilon:continue
@@ -145,9 +166,11 @@ def deprecated_metodo_predictivo_no_recursivo(G, M=None, firsts=None, follows=No
     # parser is ready!!!
     return parser
 
-# deprecated_metodo_predictivo_no_recursivo = metodo_predictivo_no_recursivo
+deprecated_metodo_predictivo_no_recursivo = metodo_predictivo_no_recursivo
 def metodo_predictivo_no_recursivo(G, M=None, firsts=None, follows=None):
     parser = deprecated_metodo_predictivo_no_recursivo(G, M, firsts, follows)
     def updated(tokens):
+        print("tokens")
+        print(tokens)
         return parser([t.token_type for t in tokens])
     return updated

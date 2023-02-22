@@ -97,61 +97,61 @@ print(G)
 
 
 
-def regex_tokenizer(text, G, skip_whitespaces=True):
-    tokens = []
-    # > fixed_tokens = ???
-    fixed_tokens = { lex: Token(lex, G[lex]) for lex in '| * ( ) ε'.split() }
-    for char in text:
-        if skip_whitespaces and char.isspace():
-            continue
-        # Your code here!!!
-        try:
-                token = fixed_tokens[char]
-        except:
-                token = Token( char, G['symbol'] )
+# def regex_tokenizer(text, G, skip_whitespaces=False):
+#     tokens = []
+#     # > fixed_tokens = ???
+#     fixed_tokens = { lex: Token(lex, G[lex]) for lex in '| * ( ) ε'.split() }
+#     for char in text:
+#         if skip_whitespaces and char.isspace():
+#             continue
+#         # Your code here!!!
+#         try:
+#                 token = fixed_tokens[char]
+#         except:
+#                 token = Token( char, G['symbol'] )
 
-        tokens.append(token)
+#         tokens.append(token)
 
-    tokens.append(Token('$', G.EOF))
-    return tokens
+#     tokens.append(Token('$', G.EOF))
+#     return tokens
 
-tokens = regex_tokenizer('a*(a|b)*cd | ε',G)
-print(tokens)
+# tokens = regex_tokenizer('a*(a|b)*cd | ε',G)
+# print(tokens)
 
-parser = metodo_predictivo_no_recursivo(G)
+# parser = metodo_predictivo_no_recursivo(G)
 
-print("==============Left-Parse==============")
-left_parse = parser(tokens)
-print(left_parse)
+# print("==============Left-Parse==============")
+# left_parse = parser(tokens)
+# print(left_parse)
 
-print('=================AST==================')
-ast = evaluate_parse(left_parse, tokens)
-print(printer(ast))
+# print('=================AST==================')
+# ast = evaluate_parse(left_parse, tokens)
+# print(printer(ast))
 
-print(type(ast))
+# print(type(ast))
 
-print('================Result================')
-nfa = ast.evaluate()
-print(nfa.transitions)
+# print('================Result================')
+# nfa = ast.evaluate()
+# print(nfa.transitions)
 # print(type(nfa))
 
-dfa = nfa_to_dfa(nfa)
-# display(dfa)
+# dfa = nfa_to_dfa(nfa)
+# print(dfa.transitions)
+# print(dfa.finals)
+# assert dfa.recognize('')
+# assert dfa.recognize('cd')
+# assert dfa.recognize('aaaaacd')
+# assert dfa.recognize('bbbbbcd')
+# assert dfa.recognize('bbabababcd')
+# assert dfa.recognize('aaabbabababcd')
 
-assert dfa.recognize('')
-assert dfa.recognize('cd')
-assert dfa.recognize('aaaaacd')
-assert dfa.recognize('bbbbbcd')
-assert dfa.recognize('bbabababcd')
-assert dfa.recognize('aaabbabababcd')
+# assert not dfa.recognize('cda')
+# assert not dfa.recognize('aaaaa')
+# assert not dfa.recognize('bbbbb')
+# assert not dfa.recognize('ababba')
+# assert not dfa.recognize('cdbaba')
+# assert not dfa.recognize('cababad')
+# assert not dfa.recognize('bababacc')
 
-assert not dfa.recognize('cda')
-assert not dfa.recognize('aaaaa')
-assert not dfa.recognize('bbbbb')
-assert not dfa.recognize('ababba')
-assert not dfa.recognize('cdbaba')
-assert not dfa.recognize('cababad')
-assert not dfa.recognize('bababacc')
-
-mini = automata_minimization(dfa)
-display(mini)
+# mini = automata_minimization(dfa)
+# display(mini)
