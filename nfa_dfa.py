@@ -59,8 +59,17 @@ def nfa_to_dfa(automaton):
                 assert False, 'Invalid DFA!!!'
             except KeyError:
                 transitions[state.id, symbol]=next.id
+                
+    print("TRANSICIONES DEL AUTOMATA DFA")
+    print(transitions)
+
+    
 
     finals = [ state.id for state in states if state.is_final ]
+
+    print("ESTADOS FINALES")
+    print(finals)
+
     dfa = DFA(len(states), finals, transitions)
     return dfa
 

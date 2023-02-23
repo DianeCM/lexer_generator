@@ -50,7 +50,7 @@ class State:
             states = self.epsilon_closure_by_state(*states)
         return any(s.final for s in states)
 
-    def to_deterministic(self, formatter=lambda x: str(x)):
+    def to_deterministic(self, get_states=False, formatter=lambda x: str(x)):
         closure = self.epsilon_closure
         start = State(tuple(closure), any(s.final for s in closure), formatter)
 
@@ -76,7 +76,8 @@ class State:
                     new_state = states[index]
 
                 state.add_transition(symbol, new_state)
-
+        if get_states:
+            return start, states
         return start
 
     @staticmethod
@@ -182,10 +183,12 @@ class State:
                 for tran, destinations in start.transitions.items():
                     for end in destinations:
                         visit(end)
-                        G.add_edge(pydot.Edge(ids, id(end), label=tran, labeldistance=2))
+                        edge_id=str(start)+ " " + tran + " " + str(end)
+                        G.add_edge(pydot.Edge(ids, id(end), label=tran, labeldistance=2, id=edge_id))
                 for end in start.epsilon_transitions:
                     visit(end)
-                    G.add_edge(pydot.Edge(ids, id(end), label='ε', labeldistance=2))
+                    edge_id=str(start)+ " " + tran + " " + str(end)
+                    G.add_edge(pydot.Edge(ids, id(end), label='ε', labeldistance=2, id=edge_id))
 
         visit(self)
         G.add_edge(pydot.Edge('start', id(self), label='', style='dashed'))

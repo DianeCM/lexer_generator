@@ -1,7 +1,7 @@
 from .cmp.utils import Token
 from .cmp.automata import State
 from .nfa_dfa_class import DFA
-from .regex import Regex
+from .regex import *
 import sys
 
 a = State(0)
@@ -70,10 +70,14 @@ class Lexer:
         for n, (token_type, regex) in enumerate(table):
             # Your code here!!!
             regex_clase = Regex(regex)
+
             print("regex_clase.automton")
             print(regex_clase.regex)
             print(token_type)
-            automat, states = State.from_nfa(regex_clase.automaton, True)
+            automata = regex_clase.automaton
+            print(automata.transitions)
+
+            automat, states = State.from_nfa(automata, True)
             finals = [state for state in states if state.final]
             for final in finals:
                 final.tag = (n, token_type)
@@ -89,34 +93,268 @@ class Lexer:
         for regex in self.regexs:
             start.add_epsilon_transition(regex)
         #---------------end-------------------
-        return start.to_deterministic()
+
+        start_state, states = start.to_deterministic(True)
+
+        self.automata_mini(states)
+
+        return start_state
+
+    def automata_mini(self, states):
+
+        # states = []
+        # states.append(states_[0])
+
+        # states.append((1,2))
+        # states.append((2,))
+        # states.append((3,4))
+        # states.append((4,))
+        # states = [(0, start), (1,2), (2,), (3,4), (4,)]
+        transitions={}
+
+        print("DFA UNION")
+        print("-----------------------------------------------------------------")
+
+        # print("states")
+        # print(states)
+
+        # print("estado inicial")
+        # print(states[0].state[0].state)
+        # print(type(states[0].state[0].state))
+
+        for i in range(0,len(states)):
+
+            # print("STATE")
+            # print(state.state)
+
+            # state = states[i].state
+            # print("Stateeeeeee")
+            # print(state)
+            # print(type(state))
+            if i == 0:
+                state = states[0]
+
+                # state_sin_tupla = state[0].state
+
+                state_sin_tupla = state.state[0].state
+                # print("ESTADO INICIAL")
+            else:
+                state = states[i]
+
+                if len(state.state) == 1:
+                    # state_sin_tupla = state[0].state
+                    state_sin_tupla = state.state[0].state
+                else:
+                    # estados = [temp.state for temp in state]
+                    estados = [temp.state for temp in state.state]
+                    # print("ESTADOS DE LA KEY")
+                    # print(estados)
+                    state_sin_tupla = tuple(estados)
+
+            # if len(state.state) == 1:
+            #     state_sin_tupla = state.state[0]
+            # else:
+            #     state_sin_tupla = state.state
+
+            # print("state_sin_tupla")
+            # print(state_sin_tupla)
+
+            # print("state.transitions")
+            # print(state.transitions)
+
+            for key in state.transitions:
+
+                # print("key")
+                # print(key)
+
+                if len(state.transitions[key][0].state) == 1:
+                    transitions[state_sin_tupla, key] = state.transitions[key][0].state[0].state
+
+                    # print("transitions[state.id, key]")
+                    # print(transitions[state_sin_tupla, key])
+                    # print(type(transitions[state_sin_tupla, key]))
+
+                else:
+                    estados = [temp.state for temp in state.transitions[key][0].state]
+                    
+                    # print("ESTADOS DEL DESTINO")
+                    # print(estados)
+
+                    transitions[state_sin_tupla, key] = tuple(estados)
+
+                    # print("transitions[state.id, key]")
+                    # print(transitions[state_sin_tupla, key])
+                    # print(type(state_sin_tupla))
+
+        # print("TRANSICIONES EN EL METODO")
+        # for trans in transitions.items():
+        #     print(trans[0])
+        #     for item in trans[0]:
+        #         if isinstance(item, tuple):
+        #             for items in item:
+        #                 print(type(items))
+                
+        #         print("=========================")
+        #     print(trans[1])
+        #     print("************************")
+
+        print(transitions)
+
+            # print("FOR VALUES")
+            # for value in transitions.values():
+            #     print(value.state)
+            #     print(type(value.state))
+
+        # assert all(isinstance(value, int) for value in transitions.values())
+
+        print("-----------------------------------------------------------------------------------")
+
+        # transitions[state.id, symbol]
+
+        
+                    # finals.append(state.state)
+
+        # finals = [ state.state for state in states if state.final ]
+
+        dicc = { state: {} for state in range(len(states)) }
+        # print("DICC")
+        # print(dicc)
+        # count=0
+        # for key in transitions.keys():
+        #     dicc[key[0]] = count
+        #     count+=1
+
+        for item in transitions.keys():
+            if item[0] in dicc:
+                dicc[item[0]] = item[0]
+
+        # print("DICC")
+        # print(dicc)
+
+        for item in transitions.values():
+            if item in dicc:
+                dicc[item] = item
+
+        # print("DICC")
+        # print(dicc)
+
+        for trans in transitions.keys():
+            if not trans[0] == 0 and not trans[0] in dicc:
+                for item in dicc.keys():
+                    if not item == 0 and not dicc[item] and not trans[0] in dicc.values():
+                        dicc[item] = trans[0]
+                        break
+
+        # print("DICC")
+        # print(dicc)
+
+                
+
+        for trans in transitions.values():
+            if not trans in dicc:
+                for item in dicc.keys():
+                    if not item == 0 and not dicc[item] and not trans in dicc.values():
+                        dicc[item] = trans
+                        break
+
+        # print("DICC")
+        # print(dicc)
+
+        
+
+        dicc_act = {value:key for (key,value) in dicc.items()}
+        # print("dicc_act")
+        # print(dicc_act)
+
+        transitions_act={}
+        # for item in dicc.keys():
+        #     if item == 0:
+        #         transitions_act[item]=transitions[dicc[item]]
+
+        for item in transitions.keys():
+            transitions_act[dicc_act[item[0]], item[1]]=transitions[item]
+
+        # finals_temp=[]
+        # for item in finals:
+        #     finals_temp.append(dicc_act[item])
+
+        
+
+        finals = []
+        for i in range(0, len(states)):
+            state = states[i]
+            if state.final:
+                if i == 0:
+                    # print("state.state[0].state")
+                    # print(state.state[0].state)
+                    finals.append(state.state[0].state)
+                else:
+                    if len(state.state) == 1:
+                        finals.append(dicc_act[state.state[0].state])
+                    else:
+                        estados = [temp.state for temp in state.state]
+                        finals.append(dicc_act[tuple(estados)])
+                        # print("ESTADOSSS")
+                        # print(estados)
+
+        # print("finals_temp")
+        # print(finals)
+
+
+        # # for item in transitions.items():
+        # #     transitions_act[dicc[item[1]]] = item[1]
+
+        # print("Transiciones")
+        # print(transitions)
+        # print("Transiciones actualizadas")
+        # print(transitions_act)
+
+        dfa = DFA(len(states), finals, transitions_act)
+        self.automata_dfa_mini = automata_minimization(dfa)
+        print("DFA")
+        print(dfa.transitions)
+
+        print("MINI")
+        print(self.automata_dfa_mini.transitions)
     
         
     def _walk(self, string):
         state = self.automaton 
         final = state if state.final else None
         final_lex = lex = ''
+
+        transitions = []
+        # transitions.append(state)
         
         for symbol in string:
             # Your code here!!!
             lex = lex + symbol
             if state.has_transition(symbol):
+                # print("state.transitions")
+                # print(state.transitions[symbol])
+                state_ant= state
                 state = state.transitions[symbol][0]
+                print(type(state))
+                
+                transitions.append((state_ant, symbol, state))
+                print("tupla")
+                print((state_ant, symbol, state))
                 if state.final:
                     final = state
                     final_lex = lex
             else:
-                return final, final_lex
+                return final, final_lex, transitions
 
         # final_lex = lex  
         #---------------end----------------------
-        return final, final_lex
+        return final, final_lex, transitions
     
     def _tokenize(self, text):
+        transitions = []
         # Your code here!!!
         while len(text) > 0:
             if text == 0: break
-            final,final_lex = self._walk(text)
+            final, final_lex, transitions = self._walk(text)
             min_tag = sys.maxsize
             for state in final.state:
                 if state.final:
@@ -125,20 +363,33 @@ class Lexer:
                         min_tag = n
                         final_type = token_type
             text = text[len(final_lex):]
-            yield final_lex,final_type
+            yield final_lex, final_type, transitions
                         
         #---------------end------------------------
         
-        yield '$', self.eof
+        yield '$', self.eof, transitions
     
     def __call__(self, text):
-        return [ Token(lex, ttype) for lex, ttype in self._tokenize(text) ]
+        return [ (Token(lex, ttype), transitions) for lex, ttype, transitions in self._tokenize(text) ]
 
 nonzero_digits = '|'.join(str(n) for n in range(1,10))
 letters = '|'.join(chr(n) for n in range(ord('a'),ord('z')+1))
 
 print('Non-zero digits:', nonzero_digits)
 print('Letters:', letters)
+
+# lexer = Lexer([
+#     ('exp_diane', 'ab*bb|a'),
+# ], 'eof')
+
+# lexer = Lexer([
+#     ('exp1', 'ab*b|a')
+# ], 'eof')
+
+# lexer = Lexer([
+#     ('exp1', 'ab*b|a')
+#     # ('exp2', 'b|a')
+# ], 'eof')
 
 # lexer = Lexer([
 #     ('num', f'({nonzero_digits})(0|{nonzero_digits})*'),
@@ -153,6 +404,8 @@ print('Letters:', letters)
 # ], 'eof')
 
 lexer = Lexer([
+    ('for' , 'a*(a|b)*cd | ε'),
+    # ('exp_diane', '(ab*)b(b|a)'),
     ('type_a_clausura' , 'a*'),
     ('type_ba_a_clausura_clausura', '(baa*)*'),
     ('type_b_or_epsilon', 'b|c')
@@ -211,5 +464,8 @@ lexer = Lexer([
 
 text = 'baaaab'
 print(f'\n>>> Tokenizando: "{text}"')
-tokens = lexer(text)
-print(tokens)
+list_tokens_transitions = lexer(text)
+
+for tokens, transitions in list_tokens_transitions:
+    print(tokens)
+    print(transitions)

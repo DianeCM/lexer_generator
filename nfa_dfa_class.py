@@ -9,7 +9,53 @@ class NFA:
         self.vocabulary = set()
         self.transitions = { state: {} for state in range(states) }
         
+        print("self.transitions")
+        print(self.transitions)
+
+        # dicc = {}
+        # count=0
+        # for key in transitions.keys():
+        #     dicc[key[0]] = count
+        #     count+=1
+        
+        # print("TRANSICIONES EN NFA")
+        # print(self.transitions)
+        # print("TRANSICIONES PROPIA EN LA CLASE NFA")
+        # for trans in self.transitions.items():
+        #     print(trans[0])
+        #     if isinstance(trans[0], tuple):
+        #         for item in trans[0]:
+        #             if isinstance(item, tuple):
+        #                 for items in item:
+        #                     print(type(items))
+        #             # print(type(item))
+        #             print("=========================")
+        #         # print(type(trans[0]))
+        #     print("************************")
+        # print(transitions)
+
+        # print("TRANSICIONES EN LA CLASE NFA")
+        # for trans in transitions.items():
+        #     print(trans[0])
+        #     for item in trans[0]:
+        #         if isinstance(item, tuple):
+        #             for items in item:
+        #                 print(type(items))
+        #         # print(type(item))
+        #         print("=========================")
+        #     # print(type(trans[0]))
+        #     print("************************")
+
+        print("transitions")
+        print(transitions)
+
         for (origin, symbol), destinations in transitions.items():
+
+            # print("ORIGINAL SYMBOL")
+            # print(origin, symbol)
+            # print("TIPO DE ORIGIN")
+            # print(type(origin))
+            # print(destinations)
             assert hasattr(destinations, '__iter__'), 'Invalid collection of states'
             self.transitions[origin][symbol] = set(destinations)
             self.vocabulary.add(symbol)
@@ -49,10 +95,18 @@ class NFA:
 class DFA(NFA):
     
     def __init__(self, states, finals, transitions, start=0):
-        assert all(isinstance(value, int) for value in transitions.values())
+        # print("DFA TRANSICIONES STATE")
+        # print(transitions)
+        # print(finals)
+        # assert all(isinstance(value, int) for value in transitions.values())
         assert all(len(symbol) > 0 for origin, symbol in transitions)
         
+        # print("TRANSICIONES DFA")
+        # print("ANTES")
+        # print(transitions)
         transitions = { key: [value] for key, value in transitions.items() }
+        # print("DESPUES")
+        # print(transitions)
         NFA.__init__(self, states, finals, transitions, start)
         self.current = start
         
