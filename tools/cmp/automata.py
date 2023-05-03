@@ -178,20 +178,22 @@ class State:
             ids = id(start)
             if ids not in visited:
                 visited.add(ids)
-                G.add_node(pydot.Node(ids, label=start.name, shape=self.shape, style='bold' if start.final else ''))
+                G.add_node(pydot.Node(start.name, label=start.name, shape=self.shape, style='bold' if start.final else ''))
                 for tran, destinations in start.transitions.items():
                     for end in destinations:
                         visit(end)
-                        G.add_edge(pydot.Edge(ids, id(end), label=tran, labeldistance=2))
+                        edge_id=str(start)+ " " + tran + " " + str(end)
+                        G.add_edge(pydot.Edge(start.name, end.name, label=tran, labeldistance=2, id=edge_id))
                 for end in start.epsilon_transitions:
                     visit(end)
-                    G.add_edge(pydot.Edge(ids, id(end), label='ε', labeldistance=2))
+                    edge_id=str(start)+ " " + tran + " " + str(end)
+                    G.add_edge(pydot.Edge(start.name, end.name, label='ε', labeldistance=2, id=edge_id))
 
         visit(self)
-        G.add_edge(pydot.Edge('start', id(self), label='', style='dashed'))
+        G.add_edge(pydot.Edge('start', self.name, label='', style='dashed'))
 
         return G
-
+    
     def _repr_svg_(self):
         try:
             return self.graph().create_svg().decode('utf8')

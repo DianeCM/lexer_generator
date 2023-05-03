@@ -20,28 +20,26 @@
 </head>
 
 <body>
+  <input id="automaton" name="graph" type="hidden" value="{{graph}}">
   <div id="contenedor">
     <div id="mynetwork">
 
       <script type="text/javascript">
-        // provide data in the DOT language
-        //var DOTstring1 = 'digraph G {margin=0.1;rankdir=LR;start [height=0, label="", shape=plaintext, width=0];0 [shape=circle, style=""];0 [shape=circle, style=""];0 -> 0  [id="0 a 0", label=a, labeldistance=2];0 [shape=circle, style=""];0 [shape=circle, style=""];0 -> 0  [id="0 b 0", label=b, labeldistance=2];1 [shape=circle, style=""];0 -> 1  [id="0 b 1", label=b, labeldistance=2];1 [shape=circle, style=""];2 [shape=circle, style=bold];1 -> 2  [id="1 a 2", label=a, labeldistance=2];start -> 0  [label="", style=dashed];}';
-        //var DOTstring2 = 'digraph G {margin=0.1;rankdir=LR;start [height=0, label="", shape=plaintext, width=0];0 [shape=circle, style=""];0 [shape=circle, style=""];0 -> 0  [id="0 a 0", label=a, labeldistance=2];0 [shape=circle, style=""];1 [shape=circle, style=""];0 -> 1  [id="0 b 1", label=b, labeldistance=2];1 [shape=circle, style=""];2 [shape=circle, style=bold];1 -> 2  [id="1 a 2", label=a, labeldistance=2];1 [shape=circle, style=""];1 [shape=circle, style=""];1 -> 1  [id="1 b 1", label=b, labeldistance=2];2 [shape=circle, style=bold];0 [shape=circle, style=""];2 -> 0  [id="2 a 0", label=a, labeldistance=2];2 [shape=circle, style=bold];1 [shape=circle, style=""];2 -> 1  [id="2 b 1", label=b, labeldistance=2];start -> 0  [label="", style=dashed];}'
-        //var tokens_automatons= [DOTstring1,DOTstring2]
-        var index=0
+
         function create_automaton(DOTstring) {
-          var parsedData = vis.parseDOTNetwork(DOTstring);
+           console.log(DOTstring)
+           var parsedData = vis.parseDOTNetwork(DOTstring);
 
-          var data = {
-            nodes: parsedData.nodes,
-            edges: parsedData.edges
-          }
+         var data = {
+             nodes: parsedData.nodes,
+             edges: parsedData.edges
+         }
 
-          var options = parsedData.options;
+         var options = parsedData.options;
 
-          // you can extend the options like a normal JSON variable:
+           // you can extend the options like a normal JSON variable:
 
-          options.edges = {
+           options.edges = {
             color: {
               color: '#848484',
               highlight: 'black'
@@ -77,40 +75,28 @@
           return new vis.Network(container, data, options);
 
         }
-        function select_path(network, origin, symbol, destiny) {
-          current_nodes=network.getSelectedNodes()
-          if (current_nodes.length == 0 ) current_nodes.push(origin)
-          current_nodes=Array.prototype.indexOf(destiny) > 0 ? current_nodes : current_nodes.concat([destiny])
-          edge= origin.toString() + ' ' + symbol + ' ' + destiny.toString()
+
+        create_automaton(document.getElementById("automaton").value)
+        // function select_path(network, origin, symbol, destiny) {
+        //   current_nodes=network.getSelectedNodes()
+        //   if (current_nodes.length == 0 ) current_nodes.push(origin)
+        //   current_nodes=Array.prototype.indexOf(destiny) > 0 ? current_nodes : current_nodes.concat([destiny])
+        //   edge= origin.toString() + ' ' + symbol + ' ' + destiny.toString()
          
-          current_edges=network.getSelectedEdges()
-          current_edges=Array.prototype.indexOf(edge) > 0 ? current_edges : current_edges.concat([edge])
-          network.setSelection({
-            nodes: current_nodes,
-            edges: current_edges
-          }, { highlightEdges: false })
-        }
+        //   current_edges=network.getSelectedEdges()
+        //   current_edges=Array.prototype.indexOf(edge) > 0 ? current_edges : current_edges.concat([edge])
+        //   network.setSelection({
+        //     nodes: current_nodes,
+        //     edges: current_edges
+        //   }, { highlightEdges: false })
+        // }
 
-        //events functions
-        function next_token(tokens_automatons){
-          index=(index+1)%tokens_automatons.length
-          network=create_automaton(tokens_automatons[index])
-        }
 
-        function previous_token(tokens_automatons){
-          index=index>0 ? index-1:tokens_automatons.length-1 
-          network=create_automaton(tokens_automatons[index])
-        }
-
-        network = create_automaton(tokens[0])
+        //network = create_automaton(DOTstring)
         //select_path(network,0,'b',1)
         //select_path(network,1,'a',2)
       </script>
     </div>
-  </div>
-  <div id="buttons" class="d-flex flex-row">
-    <button onclick="next_token(tokens)">Next</button>
-    <button onclick="previous_token(tokens)">Previous</button>
   </div>
 </body>
 

@@ -33,12 +33,12 @@
         <!--fieldset class="align-self-center" id="add_token" style="background: #f6f8ff; border: 2px solid #4238ca; width:400px; height: 400px; ">
           <legend>Add Token</legend>-->
         <div class="mb-3">
-            <input type="text" name="type" placeholder="Type"><br /><br />
+            <input autocomplete="off" type="text" name="type" placeholder="Type"><br /><br />
         </div>
         <div class="mb-3">
-          <input type="text" name="regular_expression" placeholder="Regular Expression"><br /><br />
+          <input  autocomplete="off" type="text" name="regular_expression" placeholder="Regular Expression"><br /><br/>
         </div>
-          <button type="submit" class="btn btn-primary">Add Token</button>
+          <button  type="submit" class="btn btn-primary">Add Token</button>
        <!--/fieldset>-->
     </div> 
 
@@ -49,23 +49,23 @@
             <th scope="col">Type</th>
             <th scope="col">Regular Expression</th>
             <th scope="col">Options</th>
+            <!--th scope="col"></th-->
           </tr>
         </thead>
         <tbody>
         {% for type in tokens.keys() %}
           <tr>
             <th scope="row">{{type}}</th>
-               <td>{{tokens[type]}}</td>
-               <td><button class="btn btn-primary">Delete</button></td>
+               <td value="">{{tokens[type]}}</td>
+               <!--td><button class="btn btn-primary">Delete</button></td-->
+               <td><a href="/get_graph/{{tokens[type]}}" class="btn btn-primary">Tokens automaton</a></td>
           </tr>
         {%endfor%}
         </tbody>
-      </table>
+    </table>
     </div>
     </div>
-
-      <a href="tokens_automaton"> </a>
-      <a href=""><button class="anchor btn btn-primary">Tokenizer</button></a>
+    <a href="/tokenizer/start" class=" anchor btn btn-primary">Tokenize</a>
 </body>
 
 </html>
